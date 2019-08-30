@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper	namespace="com.dao.RoleMapper">
+	<!-- 增加用户 -->
+	<insert id="add" parameterType="Role">
+		insert into smbms_role(roleCode,roleName,createdBy,creationDate) 
+		VALUES (#{roleCode},#{roleName},#{createdBy},#{creationDate})
+	</insert>
+	
+	<!-- 修改供应商 -->
+	<update id="update">
+		update smbms_role
+		<set>
+			<if test="roleName != null">roleName = #{roleName},</if>
+			<if test="createdBy !=null">createdBy = #{createdBy},</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<!-- 根据id删除用户信息 -->
+	<delete id="deleteRoleById" parameterType="integer">
+		delete from smbms_role where id=#{id}	
+	</delete>
+	
+	<resultMap type="Role" id="userRoleResult">
+		<id property="id" column="id"/>
+		<result property="roleCode" column="roleCode"/>
+		<result property="roleName" column="roleName"/>
+		<result property="createdBy" column="createdBy"/>
+		<result property="creationDate" column="creationDate"/>
+		</resultMap>
+	<select id="getRoleListByProviderId" parameterType="Integer" resultMap="userRoleResult">
+		SELECT roleCode,roleName,createdBy,creationDate FROM smbms_role WHERE roleName LIKE CONCAT('%',#{roleName},'%') AND id = #{id}
+	</select>
+	
+	 <select id="getRoleList" resultType="Role">
+	 	SELECT * FROM smbms_role r, smbms_user u 
+	 	<trim prefix="where" prefixOverrides="and | or">
+	 	<if test="userRole !=null">
+	 		and u.userRole = #{userRole}
+	 	</if>
+	 	<if	test="roleName !=null and roleName !=''">
+	 		and r.roleName like CONCAT('%',#{roleName},'%')
+	 	</if>
+	 	 r.id = u.userRole order by r.creationDate DESC limit #{from},#{pageSize}
+	 	</trim>
+	 </select>
+</mapper>

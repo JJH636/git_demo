@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper	namespace="com.dao.ProviderMapper">
+	<!-- 增加用户 -->
+	<insert id="add" parameterType="Provider">
+		insert into smbms_provider (proCode,proName,proDesc,proContact,proPhone,proAddress,proFax,createdBy,creationDate) 
+		VALUES (#{proCode},#{proName},#{proDesc},#{proContact},#{proPhone},#{proAddress},#{proFax},#{createdBy},#{creationDate})
+	</insert>
+	
+	<!-- 修改供应商 -->
+	<update id="update">
+		update smbms_provider 
+		<trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+			<if test="proName !=null">proName = #{proName},</if>
+			<if test="createdBy !=null">createdBy = #{createdBy},</if>
+		</trim>
+	</update>
+	
+	<!-- 根据id删除用户信息 -->
+	<delete id="deleteProById" parameterType="integer">
+		delete from smbms_provider where id=#{id}	
+	</delete>
+	<!-- 根据id查询 -->
+	<resultMap type="Provider" id="userBillResult">
+		<id property="id" column="id"/>
+		<result property="proCode" column="proCode"/>
+		<result property="proName" column="proName"/>
+		<result property="proContact" column="proContact"/>
+		<result property="proPhone" column="proPhone"/>
+		<collection property="billList" ofType="Provider" resultMap="BillResult"/>
+		</resultMap>
+		<resultMap type="Bill" id="BillResult">
+			<id property="id" column="a_id"/>
+			<result property="billCode" column="billCode"/>
+			<result property="productName" column="productName"/>
+			<result property="totalPrice" column="totalPrice"/>
+			<result property="isPayment" column="isPayment"/>
+	</resultMap>
+	<select id="getBillListById" parameterType="Integer" resultMap="userBillResult">
+		SELECT b.id as a_id, p.id,p.proCode,p.proName,p.proContact,p.proPhone,b.billCode,b.productName,b.totalPrice,b.isPayment FROM smbms_provider p LEFT JOIN smbms_bill b ON p.id = b.providerId
+		<where>
+			<if test="id !=null">
+				p.id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getProvider_choose" resultType="Provider">
+		select * from smbms_provider where 1=1
+		<choose>
+			<when test="proCode !=null and proCode !=''">
+				and proCode like CONCAT('%',#{proCode},'%')
+			</when>
+			<when test="proName !=null and proName !=''">
+				and proName like CONCAT('%',#{proName},'%')
+			</when>
+			<when test="proContact !=null">
+				and proContact like CONCAT('%',#{proContact},'%')
+			</when>
+			<otherwise>
+				and YEAR(creationDate) = YEAR(#{creationDate})
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getProviderList" resultType="Provider">
+		select * from smbms_provider
+	 	<if	test="proName !=null and proName !=''">
+	 		 proName like CONCAT('%',#{proName},'%')
+	 	</if>
+	 		order by creationDate DESC limit #{from},#{pageSize}
+	 </select>
+</mapper>

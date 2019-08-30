@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.BillMapper">
+	<select id="getBillList" resultMap="BillList" parameterType="Bill">
+		SELECT * FROM smbms_bill b,smbms_provider p 
+		<where>
+		<if test="productName !=null and productName !=''">
+		 b.productName LIKE CONCAT('%',#{productName},'%')
+		</if>
+		<if test="providerId !=null">
+		and b.providerId = #{providerId} AND b.providerId = p.id
+		</if>
+		</where>
+	</select>
+	<resultMap type="bill" id="BillList">
+		<result property="id" column="id"/>
+		<result property="billCode" column="billCode"/>
+		<result property="productName" column="productName"/>
+		<result property="isPayment" column="isPayment"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="providerId" column="providerId"/>
+		<result property="providerName" column="providerName"/>
+	</resultMap>
+	
+	<resultMap type="bill" id="userRoleResult">
+		<id property="id" column="id"/>
+		<result property="billCode" column="billCode"/>
+		<result property="productName" column="productName"/>
+		<result property="isPayment" column="isPayment"/>
+		<result property="creationDate" column="creationDate"/>
+		<result property="totalPrice" column="totalPrice"></result>
+		<association property="provider" javaType="Provider" resultMap="ProviderResult"/>
+		</resultMap>
+		<resultMap type="Provider" id="ProviderResult">
+		<id property="id" column="r_id"/>
+		<result property="providerId" column="providerId"/>
+		<result property="proName" column="proName"/>
+	</resultMap>
+	<select id="getBillListByProviderId" parameterType="Integer" resultMap="userRoleResult">
+		SELECT p.id as r_id, b.billCode,b.productName,p.proName,b.totalPrice,b.isPayment,b.creationDate FROM smbms_bill b,smbms_provider p WHERE b.productName LIKE CONCAT('%',#{productName},'%') AND b.providerId = #{providerId} AND b.providerId = p.id
+	</select>
+	
+	<select id="getBillListByProviderId_foreach" resultMap="BillList">
+		SELECT billCode,productName,totalPrice,isPayment,creationDate FROM smbms_bill WHERE providerId in 
+		<foreach collection="list" item="ProviderList" open="(" separator="," close=")">
+			#{ProviderList}
+		</foreach>
+	</select>
+	
+	<select id="getBillListB_foreach_map" resultMap="BillList">
+		SELECT billCode,productName,totalPrice,isPayment,creationDate FROM smbms_bill WHERE providerId in 
+		<foreach collection="rKey" item="billMap" open="(" separator="," close=")">
+			#{billMap}
+		</foreach>
+	</select>
+	
+	<select id="getBillList1" resultType="Bill">
+	 	select b.*,p.proName from smbms_bill b, smbms_provider p WHERE b.providerId = p.id
+	 	<if	test="productName !=null and productName !=''">
+	 		and b.productName like CONCAT('%',#{productName},'%')
+	 	</if>
+	 	order by creationDate DESC limit #{from},#{pageSize}
+	 </select>
+</mapper>
