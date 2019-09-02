@@ -10,10 +10,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="PageCount" resultType="Integer">
 		SELECT COUNT(1) FROM app_info WHERE 1=1
-			<if test="softwareName!=null||softwareName!=''">
+			<if test="softwareName != null || softwareName != '' ">
 				AND softwareName LIKE CONCAT('%',#{softwareName},'%') 
 			</if>
-			<if test="status!=null||status!=''">
+			<if test="status != 0">
 				AND status = #{status}
 			</if>
 			<if test="flatformId !=0">
@@ -69,10 +69,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="add" parameterType="app_info">
-		insert into app_info (softwareName,APKName,supportROM,interfaceLanguage,
-                downloads,flatformId,categoryLevel1,categoryLevel2,categoryLevel3,status,appInfo,logoPicPath,logoLocPath) 
-        values (#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},
-                #{downloads},#{flatformId},#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},#{status},#{appInfo},#{logoPicPath},#{logoLocPath})
+		insert into app_info (softwareName,APKName,supportROM,interfaceLanguage,softwareSize
+                downloads,flatformId,categoryLevel1,categoryLevel2,categoryLevel3,status,appInfo,logoPicPath,logoLocPath,createdBy,creationDate) 
+        values (#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize}
+                #{downloads},#{flatformId},#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},#{status},#{appInfo},#{logoPicPath},#{logoLocPath},#{createdBy},#{creationDate})
 	</insert>
 	
 	<!-- 修改用户信息 -->
@@ -82,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 		<if test="softwareName != null">softwareName=#{softwareName},</if>
 				<if test="APKName != null">APKName=#{APKName},</if>
 				<if test="supportROM != null">supportROM=#{supportROM},</if>
+				<if test="softwareSize !=null">softwareSize=#{softwareSize},</if>
 				<if test="interfaceLanguage != null">interfaceLanguage=#{interfaceLanguage},</if>
 				<if test="downloads != null">downloads=#{downloads},</if>
 				<if test="flatformId != null">flatformId=#{flatformId},</if>
@@ -92,4 +93,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="appInfo != null">appInfo=#{appInfo}</if>
 			 </trim>
 	</update>
+	
+	<select id="getAPK" resultType="app_info">
+		select * from app_info
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="APKName != null || APKName!= '' ">
+				and APKName = #{APKName}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getid" resultType="app_info">
+		 SELECT *,(SELECT valueName FROM data_dictionary d WHERE  a.status=d.valueId AND d.typeCode='APP_STATUS') AS statusName FROM app_info a
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="id != null || id!= '' ">
+				and a.id = #{id}
+			</if>
+		</trim>
+	</select>
 </mapper>

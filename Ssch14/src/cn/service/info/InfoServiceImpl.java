@@ -78,4 +78,26 @@ public class InfoServiceImpl implements InfoService {
 		return false;
 	}
 
+	@Override
+	public app_info getAPK(String APKName) {
+		app_info info = null;
+		try{
+			info = infomapper.getAPK(APKName);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return info;
+	}
+
+	@Override
+	public app_info getid(Integer id) {
+		app_info info =null;
+		try{
+			info = infomapper.getid(id);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return info;
+	}
+
 }

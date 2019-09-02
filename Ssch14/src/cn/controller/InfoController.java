@@ -1,21 +1,34 @@
 package cn.controller;
 
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 
 import cn.pojo.PageSupport;
 import cn.pojo.app_category;
 import cn.pojo.app_info;
 import cn.pojo.data_dictionary;
+import cn.pojo.dev_user;
 import cn.service.category.categoryService;
 import cn.service.dictionary.dictionaryService;
 import cn.service.info.InfoService;
@@ -108,9 +121,7 @@ public class InfoController {
 		model.addAttribute("flatFormList",data2);
 		model.addAttribute("categoryLevel1List",list1);
 		model.addAttribute("querySoftwareName", querySoftwareName);
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("currentPageNo", currentpageNo);
-		model.addAttribute("totalPageCount", totalPageCount);
+		model.addAttribute("pages",page);
 
 		logger.debug("已经到了要跳转的时候了！！。。。。");
 		return "/developer/appinfolist";
@@ -119,6 +130,7 @@ public class InfoController {
 	@RequestMapping(value="/categorylevellist")
 	@ResponseBody
 	public Object selectid(@RequestParam Integer pid){
+		System.out.println("进入了三级查询");
 		return JSON.toJSON(cateservice.getlist1(pid));
 	}
 	
@@ -130,6 +142,92 @@ public class InfoController {
 	@RequestMapping(value="/datadictionarylist")
 	@ResponseBody
 	public Object selectPT(@RequestParam String tcode){
+		System.out.println("进入了平台查询");
 		return JSON.toJSON(dicservice.getlist3(tcode));
+	}
+	
+	
+	@RequestMapping(value="/appinfoaddsave",method=RequestMethod.POST)
+	public String addUserSave(app_info info,HttpSession session,
+			HttpServletRequest request,
+			@RequestParam(value="a_logoPicPath",required=false) MultipartFile attach){
+		String fileUploadError = null;		//照片的路径
+		String path = null;
+		//判断文件是否为空
+		if(!attach.isEmpty()){
+			//设置你要保存的路径
+			path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+			logger.debug("path========>" + path);
+			String oldFileName = attach.getOriginalFilename();		//原文件名
+			logger.debug("oldFileName========>" + oldFileName);
+			String prefix = FilenameUtils.getExtension(oldFileName);	//源文件后缀
+			
+			int filesize = 500000;
+			logger.debug("oldFileName========>" + attach.getSize());
+			if(attach.getSize() > filesize){
+				request.setAttribute("uploadFileError", "上传大小不能超过500KB");
+				System.out.println("图片过大");
+				return "/developer/appinfoadd";
+			} else if(prefix.equalsIgnoreCase("jpg") || prefix.equalsIgnoreCase("png") ||
+					prefix.equalsIgnoreCase("jpeg") || prefix.equalsIgnoreCase("pneg")) {
+				//文件的新名称
+				String fileName = System.currentTimeMillis() + RandomUtils.nextInt(1000000) + "_Personal.jpg";
+				logger.debug("fileName========>" + fileName);
+				File targetFile = new File(path,fileName);
+				if(!targetFile.exists()){
+					targetFile.mkdirs();
+				}
+				//保存
+				try {
+					attach.transferTo(targetFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("uploadFileError", "文件上传失败！");
+					System.out.println("文件上传失败");
+					return "/developer/appinfoadd";
+				}
+				//这是要保存到数据库的
+				fileUploadError = path+File.separator + fileName;
+			} else {
+				request.setAttribute("uploadFileError", "文件格式不正确！");
+				System.out.println("文件格式不正确");
+				return "/developer/appinfoadd";
+			}
+			
+		}
+		//调用保存的方法，实现保存
+		System.out.println(((dev_user)session.getAttribute("devUser")).getId());
+		info.setCreatedBy(((dev_user)session.getAttribute("devUser")).getId());
+		info.setCreationDate(new Date());
+		info.setLogoPicPath(fileUploadError);
+		info.setLogoLocPath(path);
+		if(infoservice.add(info)){
+			return "redirect:/app/list";
+		}
+		System.out.println("保存错误");
+		return "developer/appinfoadd";
+	}
+	@RequestMapping(value="/apkexist")
+	@ResponseBody
+	public Object delbill(@RequestParam String APKName){
+		HashMap<String, String> reHashMap = new HashMap<String,String>();
+		if(APKName == null || APKName==""){
+			reHashMap.put("APKName", "empty");
+		}else{
+			app_info info = infoservice.getAPK(APKName);
+			if(info != null){
+				reHashMap.put("APKName", "exist");
+			}else{
+				reHashMap.put("APKName", "noexist");
+			}
+		}
+		return JSONArray.toJSONString(reHashMap);
+	}
+	
+	@RequestMapping(value="/appinfomodify/{id}",method=RequestMethod.GET)
+	public String appinfomodify(@PathVariable Integer id,Model model){
+		app_info info = infoservice.getid(id);
+		model.addAttribute("appInfo", info);
+		return "/developer/appinfomodify";
 	}
 }

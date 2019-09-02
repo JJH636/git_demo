@@ -17,4 +17,8 @@ public interface InfoService {
 	public boolean add(app_info info);
 	
 	public boolean modify(app_info info);
+	
+	public app_info getAPK(String APKName);
+	
+	public app_info getid(Integer id);
 }
