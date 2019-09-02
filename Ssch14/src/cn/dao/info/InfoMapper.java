@@ -15,4 +15,8 @@ public interface InfoMapper {
 			@Param("currentPageNo")Integer currentPageNo,@Param("pageSize")Integer pageSize) throws Exception;
 	
 	public List<app_info> getList() throws Exception;
+	
+	public int add(app_info info)throws Exception;
+	
+	public int modify(app_info info)throws Exception;
 }

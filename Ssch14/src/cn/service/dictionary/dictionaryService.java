@@ -8,4 +8,6 @@ public interface dictionaryService {
 	public List<data_dictionary> getlist1();
 	
 	public List<data_dictionary> getlist2();
+	
+	public List<data_dictionary> getlist3(String typeCode);
 }

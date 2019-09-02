@@ -13,4 +13,8 @@ public interface InfoService {
 			Integer pageIndex,Integer pageSize);
 	
 	public List<app_info> getList();
+	
+	public boolean add(app_info info);
+	
+	public boolean modify(app_info info);
 }

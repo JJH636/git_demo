@@ -34,4 +34,15 @@ public class dictionaryServiceImpl implements dictionaryService {
 		return list;
 	}
 
+	@Override
+	public List<data_dictionary> getlist3(String typeCode) {
+		List<data_dictionary> list = null;
+		try{
+			list = mapper.getlist3(typeCode);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return list;
+	}
+
 }

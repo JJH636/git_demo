@@ -11,4 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getlist2" resultType="data_dictionary">
 		SELECT * FROM data_dictionary WHERE typeCode = "APP_FLATFORM"
 	</select>
+	
+	<select id="getlist3" resultType="data_dictionary">
+		SELECT * FROM data_dictionary WHERE typeCode = #{typeCode}
+	</select>
 </mapper>

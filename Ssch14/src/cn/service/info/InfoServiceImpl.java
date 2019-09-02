@@ -50,4 +50,32 @@ public class InfoServiceImpl implements InfoService {
 		return list;
 	}
 
+	@Override
+	public boolean add(app_info info) {
+		int num = 0;
+		try {
+			num = infomapper.add(info);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean modify(app_info info) {
+		int num = 0;
+		try {
+			num = infomapper.modify(info);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

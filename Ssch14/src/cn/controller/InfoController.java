@@ -118,13 +118,18 @@ public class InfoController {
 	
 	@RequestMapping(value="/categorylevellist")
 	@ResponseBody
-	public Object selectid(@RequestParam String pid){
-		int id = Integer.parseInt(pid);
-		return JSON.toJSON(cateservice.getlist1(id));
+	public Object selectid(@RequestParam Integer pid){
+		return JSON.toJSON(cateservice.getlist1(pid));
 	}
 	
 	@RequestMapping(value="/appinfoadd")
 	public String add(){
 		return "/developer/appinfoadd";
+	}
+	
+	@RequestMapping(value="/datadictionarylist")
+	@ResponseBody
+	public Object selectPT(@RequestParam String tcode){
+		return JSON.toJSON(dicservice.getlist3(tcode));
 	}
 }
