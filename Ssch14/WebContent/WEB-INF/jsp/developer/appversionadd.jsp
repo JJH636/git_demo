@@ -56,7 +56,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="appVersion" items="${appVersionList }" varStatus="status">
+							<c:forEach var="appVersion" items="${appVersionList}" varStatus="status">
 								<tr role="row" class="odd">
 									<td tabindex="0" class="sorting_1">${appVersion.appName}</td>
 									<td>${appVersion.versionNo }</td>
@@ -85,7 +85,7 @@
         <div class="x_content" style="display: block;">
          <br>
         <form class="form-horizontal form-label-left" action="addversionsave" method="post" enctype="multipart/form-data">
-           <input type="hidden" name="appId" name="appId" value="${appVersion.appId}">
+           <input type="hidden" id="appId" name="appId"  value="${appVersion}">
           <div class="item form-group">
             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">版本号 <span class="required">*</span>
             </label>

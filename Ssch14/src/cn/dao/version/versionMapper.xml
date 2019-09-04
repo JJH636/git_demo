@@ -5,11 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="cn.dao.version.versionMapper">
 	<select id="getid" resultType="app_version">
-		SELECT * FROM app_version WHERE appId = #{appId}
+		SELECT *,(SELECT softwareName FROM app_info WHERE Id = appId)as appName,(SELECT valueName FROM data_dictionary WHERE typeName='发布状态' AND publishStatus = valueId)AS publishStatusName FROM app_version WHERE appId = #{appId}
 	</select>
 	
 	<insert id="add" parameterType="app_version">
-		insert into app_version (versionNo,versionSize,publishStatus,versionInfo,apkLocPath) 
-        values (#{versionNo},#{versionSize},#{publishStatus},#{versionInfo},#{apkLocPath})
+		insert into app_version (appId,versionNo,versionSize,publishStatus,versionInfo,downloadLink,createdBy,creationDate,apkFileName) 
+        values (#{appId},#{versionNo},#{versionSize},#{publishStatus},#{versionInfo},#{downloadLink},#{createdBy},#{creationDate},#{apkFileName})
 	</insert>
 </mapper>

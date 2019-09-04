@@ -1,5 +1,6 @@
 package cn.service.info;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,20 @@ public class InfoServiceImpl implements InfoService {
 			e.printStackTrace();
 		}
 		return info;
+	}
+
+	@Override
+	public boolean modifyid(BigInteger id) {
+		int num = 0;
+		try {
+			num = infomapper.modifyid(id);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

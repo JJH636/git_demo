@@ -1,5 +1,6 @@
 package cn.pojo;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 public class app_version {
@@ -10,10 +11,10 @@ public class app_version {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getAppId() {
+	public BigInteger getAppId() {
 		return appId;
 	}
-	public void setAppId(int appId) {
+	public void setAppId(BigInteger appId) {
 		this.appId = appId;
 	}
 	public String getVersionNo() {
@@ -46,11 +47,11 @@ public class app_version {
 	public void setVersionSize(double versionSize) {
 		this.versionSize = versionSize;
 	}
-	public int getCreateBy() {
-		return createBy;
+	public int getCreatedBy() {
+		return createdBy;
 	}
-	public void setCreateBy(int createBy) {
-		this.createBy = createBy;
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
 	}
 	public Date getCreationDate() {
 		return creationDate;
@@ -70,14 +71,35 @@ public class app_version {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-	private int appId;
+	private BigInteger appId;
 	private String versionNo;
 	private String versionInfo;
 	private int publishStatus;
 	private String downloadLink;
 	private double versionSize;
-	private int createBy;
+	private int createdBy;
 	private Date creationDate;
 	private int modifyBy;
 	private Date modifyDate;
+	private String appName;
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	private String publishStatusName;
+	public String getPublishStatusName() {
+		return publishStatusName;
+	}
+	public void setPublishStatusName(String publishStatusName) {
+		this.publishStatusName = publishStatusName;
+	}
+	private String apkFileName;
+	public String getApkFileName() {
+		return apkFileName;
+	}
+	public void setApkFileName(String apkFileName) {
+		this.apkFileName = apkFileName;
+	}
 }

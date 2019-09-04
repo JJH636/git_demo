@@ -1,5 +1,6 @@
 package cn.service.info;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import cn.pojo.app_info;
@@ -18,7 +19,10 @@ public interface InfoService {
 	
 	public boolean modify(app_info info);
 	
+	public boolean modifyid(BigInteger bigInteger);
+	
 	public app_info getAPK(String APKName);
 	
 	public app_info getid(Integer id);
+
 }

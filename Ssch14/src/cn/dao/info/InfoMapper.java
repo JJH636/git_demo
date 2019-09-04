@@ -1,5 +1,6 @@
 package cn.dao.info;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -19,6 +20,8 @@ public interface InfoMapper {
 	public int add(app_info info)throws Exception;
 	
 	public int modify(app_info info)throws Exception;
+	
+	public int modifyid(@Param("id")BigInteger id)throws Exception;
 	
 	public app_info getAPK(@Param("APKName")String APKName)throws Exception;
 	

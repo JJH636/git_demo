@@ -153,11 +153,11 @@ public class InfoController {
 			HttpServletRequest request,
 			@RequestParam(value="a_logoPicPath",required=false) MultipartFile attach){
 		String fileUploadError = null;		//照片的路径
-		String path = null;
+		String LogoLocPath =null;
 		//判断文件是否为空
 		if(!attach.isEmpty()){
 			//设置你要保存的路径
-			path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
+			String path = request.getSession().getServletContext().getRealPath("statics" + File.separator + "uploadfiles");
 			logger.debug("path========>" + path);
 			String oldFileName = attach.getOriginalFilename();		//原文件名
 			logger.debug("oldFileName========>" + oldFileName);
@@ -189,6 +189,7 @@ public class InfoController {
 				}
 				//这是要保存到数据库的
 				fileUploadError = path+File.separator + fileName;
+				LogoLocPath = fileUploadError.substring(fileUploadError.indexOf("Ssch14")-1);
 			} else {
 				request.setAttribute("uploadFileError", "文件格式不正确！");
 				System.out.println("文件格式不正确");
@@ -201,7 +202,7 @@ public class InfoController {
 		info.setCreatedBy(((dev_user)session.getAttribute("devUser")).getId());
 		info.setCreationDate(new Date());
 		info.setLogoPicPath(fileUploadError);
-		info.setLogoLocPath(path);
+		info.setLogoLocPath(LogoLocPath);
 		if(infoservice.add(info)){
 			return "redirect:/app/list";
 		}
@@ -225,19 +226,19 @@ public class InfoController {
 		return JSONArray.toJSONString(reHashMap);
 	}
 	
-	@RequestMapping(value="/appinfomodify/{id}",method=RequestMethod.GET)
-	public String appinfomodify(@PathVariable Integer id,Model model){
+	@RequestMapping(value="/appinfomodify",method=RequestMethod.GET)
+	public String appinfomodify(@RequestParam Integer id,Model model){
 		app_info info = infoservice.getid(id);
 		model.addAttribute("appInfo", info);
 		return "/developer/appinfomodify";
 	}
 	 
-	@RequestMapping(value="/appinfomodifysave")
+	@RequestMapping(value="/appinfomodifysave",method=RequestMethod.POST)
 	public String appinfomodify1(app_info info, HttpSession session){
 		info.setModifyBy(((dev_user)session.getAttribute("devUser")).getId());
 		info.setModifyDate(new Date());
 		if(infoservice.modify(info)){
-			return"redirect:/developer/appinfolist";
+			return"redirect:/app/list";
 		}
 		return "/developer/appinfomodify";
 	}

@@ -10,4 +10,8 @@ public interface versionMapper {
 	public int add(app_version version)throws Exception;
 	
 	public List<app_version> getid(@Param("appId")Integer appId)throws Exception;
+	
+	public int mofidy(app_version version)throws Exception;
+	
+	public List<app_version> getBYid(@Param("appId")Integer appId)throws Exception;
 }
