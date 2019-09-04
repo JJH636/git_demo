@@ -130,7 +130,9 @@ public class InfoController {
 	@RequestMapping(value="/categorylevellist")
 	@ResponseBody
 	public Object selectid(@RequestParam Integer pid){
-		System.out.println("进入了三级查询");
+		if(pid == null){
+			pid = 0;
+		}
 		return JSON.toJSON(cateservice.getlist1(pid));
 	}
 	
@@ -142,7 +144,6 @@ public class InfoController {
 	@RequestMapping(value="/datadictionarylist")
 	@ResponseBody
 	public Object selectPT(@RequestParam String tcode){
-		System.out.println("进入了平台查询");
 		return JSON.toJSON(dicservice.getlist3(tcode));
 	}
 	
@@ -196,7 +197,7 @@ public class InfoController {
 			
 		}
 		//调用保存的方法，实现保存
-		System.out.println(((dev_user)session.getAttribute("devUser")).getId());
+		
 		info.setCreatedBy(((dev_user)session.getAttribute("devUser")).getId());
 		info.setCreationDate(new Date());
 		info.setLogoPicPath(fileUploadError);
@@ -228,6 +229,16 @@ public class InfoController {
 	public String appinfomodify(@PathVariable Integer id,Model model){
 		app_info info = infoservice.getid(id);
 		model.addAttribute("appInfo", info);
+		return "/developer/appinfomodify";
+	}
+	 
+	@RequestMapping(value="/appinfomodifysave")
+	public String appinfomodify1(app_info info, HttpSession session){
+		info.setModifyBy(((dev_user)session.getAttribute("devUser")).getId());
+		info.setModifyDate(new Date());
+		if(infoservice.modify(info)){
+			return"redirect:/developer/appinfolist";
+		}
 		return "/developer/appinfomodify";
 	}
 }

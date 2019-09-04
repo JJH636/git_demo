@@ -58,10 +58,11 @@ $("#queryCategoryLevel2").change(function(){
 });
 
 
-$(".addVersion").on("click",function(){
+$(".addVersion").on("click",function(){//新增app版本
 	var obj = $(this);
-	window.location.href="appversionadd?id="+obj.attr("appinfoid");
+	window.location.href="/version/appversionadd/"+obj.attr("appinfoid");
 });
+
 $(".modifyVersion").on("click",function(){
 	var obj = $(this);
 	var status = obj.attr("status");
@@ -77,7 +78,8 @@ $(".modifyVersion").on("click",function(){
 		alert("该APP应用的状态为：【"+obj.attr("statusname")+"】,不能修改其版本信息，只可进行【新增版本】操作！");
 	}
 });
-$(".modifyAppInfo").on("click",function(){
+
+$(".modifyAppInfo").on("click",function(){//修改
 	var obj = $(this);
 	var status = obj.attr("status");
 	if(status == "1" || status == "3"){//待审核、审核未通过状态下才可以进行修改操作
