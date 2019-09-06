@@ -1,5 +1,6 @@
 package cn.service.version;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,44 @@ public class versionServiceImpl implements versionService {
 			e.printStackTrace();
 		}
 		return ver;
+	}
+
+	@Override
+	public boolean mofidy(app_version version) {
+		int num = 0;
+		try {
+			num = mapper.mofidy(version);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public app_version getBYid(Integer appId) {
+		app_version ver = null;
+		try{
+			ver = mapper.getBYid(appId);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return ver;
+	}
+
+	@Override
+	public boolean mofidyzip(BigInteger id) {
+		int num = 0;
+		try {
+			num = mapper.mofidyzip(id);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

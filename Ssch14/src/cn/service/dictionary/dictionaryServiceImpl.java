@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.dao.dictionary.dictionaryMapper;
+import cn.pojo.app_info;
 import cn.pojo.data_dictionary;
 @Service
 public class dictionaryServiceImpl implements dictionaryService {
@@ -44,5 +45,4 @@ public class dictionaryServiceImpl implements dictionaryService {
 		}
 		return list;
 	}
-
 }

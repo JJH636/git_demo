@@ -1,6 +1,3 @@
 $("#back").on("click",function(){
-	window.location.href = "../list";
+	window.location.href = "/Ssch14/app/list";
 });
-	
-	
-	

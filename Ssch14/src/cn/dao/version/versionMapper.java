@@ -1,5 +1,6 @@
 package cn.dao.version;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -13,5 +14,7 @@ public interface versionMapper {
 	
 	public int mofidy(app_version version)throws Exception;
 	
-	public List<app_version> getBYid(@Param("appId")Integer appId)throws Exception;
+	public app_version getBYid(@Param("appId")Integer appId)throws Exception;
+	
+	public int mofidyzip(@Param("id")BigInteger id)throws Exception;
 }

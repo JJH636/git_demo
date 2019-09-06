@@ -72,7 +72,7 @@ $(".modifyVersion").on("click",function(){
 		if(versionid == null || versionid == ""){
 			alert("该APP应用无版本信息，请先增加版本信息！");
 		}else{
-			window.location.href="appversionmodify?vid="+ versionid + "&aid="+ appinfoid;
+			window.location.href="../version/appversionmodify?vid="+ versionid + "&aid="+ appinfoid;
 		}
 	}else{
 		alert("该APP应用的状态为：【"+obj.attr("statusname")+"】,不能修改其版本信息，只可进行【新增版本】操作！");
@@ -104,8 +104,9 @@ $(document).on("click",".saleSwichOpen,.saleSwichClose",function(){
 
 var saleSwitchAjax = function(appId,obj){
 	$.ajax({
-		type:"PUT",
-		url:appId+"/sale.json",
+		type:"GET",
+		url:"../app/sale.json",
+		data:{Id:appId},
 		dataType:"json",
 		success:function(data){
 			/*
@@ -174,7 +175,7 @@ var saleSwitchAjax = function(appId,obj){
 
 $(".viewApp").on("click",function(){
 	var obj = $(this);
-	window.location.href="appview/"+ obj.attr("appinfoid");
+	window.location.href="../version/appview/"+ obj.attr("appinfoid");
 });
 
 $(".deleteApp").on("click",function(){
@@ -182,7 +183,7 @@ $(".deleteApp").on("click",function(){
 	if(confirm("你确定要删除APP应用【"+obj.attr("appsoftwarename")+"】及其所有的版本吗？")){
 		$.ajax({
 			type:"GET",
-			url:"delapp.json",
+			url:"../app/delapp.json",
 			data:{id:obj.attr("appinfoid")},
 			dataType:"json",
 			success:function(data){

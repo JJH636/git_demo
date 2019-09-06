@@ -69,9 +69,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="add" parameterType="app_info">
-		insert into app_info (softwareName,APKName,supportROM,interfaceLanguage,softwareSize
+		insert into app_info (softwareName,APKName,supportROM,interfaceLanguage,softwareSize,
                 downloads,flatformId,categoryLevel1,categoryLevel2,categoryLevel3,status,appInfo,logoPicPath,logoLocPath,createdBy,creationDate) 
-        values (#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize}
+        values (#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{softwareSize},
                 #{downloads},#{flatformId},#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},#{status},#{appInfo},#{logoPicPath},#{logoLocPath},#{createdBy},#{creationDate})
 	</insert>
 	
@@ -114,5 +114,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="modifyid" parameterType="app_info">
 		 update app_info SET versionId = (SELECT id FROM app_version ORDER BY id DESC LIMIT 1) WHERE id = #{id}
+	</update>
+	
+	<update id="modifyPhoto" parameterType="app_info">
+		 update app_info SET logoPicPath = NULL WHERE id = #{id}
+	</update>
+	
+	<select id="getid2" resultType="app_info">
+		 SELECT a.id, a.softwareName,a.APKName,a.supportROM,a.softwareSize,a.devId,a.appInfo,a.logoPicPath,a.logoLocPath,a.interfaceLanguage,
+		(SELECT devName FROM dev_user WHERE id = a.devId) AS devName,
+		 a.status,
+		(SELECT valueName FROM data_dictionary d WHERE  a.status=d.valueId AND d.typeCode='APP_STATUS') AS statusName,
+		 a.flatformId,
+		 (SELECT valueName FROM data_dictionary d WHERE  a.flatformId=d.valueId AND d.typeCode='APP_FLATFORM') AS flatformName,
+		 a.categoryLevel1,
+		 (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel1) AS categoryLevel1Name,
+		 a.categoryLevel2,
+		 (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel2) AS categoryLevel2Name,
+			a.categoryLevel3,
+		 (SELECT categoryName FROM app_category c WHERE  c.id=a.categoryLevel3) AS categoryLevel3Name,
+		  a.downloads,a.onSaleDate,a.versionId,
+		 (SELECT v.versionNo FROM app_version v WHERE v.id=a.versionId ) AS versionNo
+		  FROM  app_info a
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="id != null || id!= '' ">
+				and a.id = #{id}
+			</if>
+		</trim>
+	</select>
+	
+	<delete id="delete" parameterType="integer">
+		DELETE a,v from app_info a LEFT JOIN app_version v ON a.id = v.appId where a.id = #{id}
+	</delete>
+	
+	<update id="modifyupdown" parameterType="app_info">
+		update app_info SET status = #{status} WHERE id = #{id}
 	</update>
 </mapper>

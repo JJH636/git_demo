@@ -1,6 +1,7 @@
 package cn.controller;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -153,7 +154,7 @@ public class InfoController {
 			HttpServletRequest request,
 			@RequestParam(value="a_logoPicPath",required=false) MultipartFile attach){
 		String fileUploadError = null;		//照片的路径
-		String LogoLocPath =null;
+		String LogoPicPath = null;
 		//判断文件是否为空
 		if(!attach.isEmpty()){
 			//设置你要保存的路径
@@ -189,7 +190,7 @@ public class InfoController {
 				}
 				//这是要保存到数据库的
 				fileUploadError = path+File.separator + fileName;
-				LogoLocPath = fileUploadError.substring(fileUploadError.indexOf("Ssch14")-1);
+				LogoPicPath = request.getContextPath() + "/statics/uploadfiles/" + fileName;
 			} else {
 				request.setAttribute("uploadFileError", "文件格式不正确！");
 				System.out.println("文件格式不正确");
@@ -198,11 +199,10 @@ public class InfoController {
 			
 		}
 		//调用保存的方法，实现保存
-		
 		info.setCreatedBy(((dev_user)session.getAttribute("devUser")).getId());
 		info.setCreationDate(new Date());
-		info.setLogoPicPath(fileUploadError);
-		info.setLogoLocPath(LogoLocPath);
+		info.setLogoPicPath(LogoPicPath);
+		info.setLogoLocPath(fileUploadError);
 		if(infoservice.add(info)){
 			return "redirect:/app/list";
 		}
@@ -241,5 +241,58 @@ public class InfoController {
 			return"redirect:/app/list";
 		}
 		return "/developer/appinfomodify";
+	}
+	
+	@RequestMapping(value="/delapp")
+	@ResponseBody
+	public Object del(@RequestParam Integer id){
+		HashMap<String, String> reHashMap = new HashMap<String,String>();
+		if(id == null){
+			reHashMap.put("delResult", "notexist");
+		}else{
+			boolean fig = infoservice.delete(id);
+			if(fig){
+				reHashMap.put("delResult", "true");
+				}else{
+				reHashMap.put("delResult", "false");
+				}
+			}
+		return JSONArray.toJSONString(reHashMap);
+	}
+	
+	@RequestMapping(value="/sale")
+	@ResponseBody
+	public Object updown(@RequestParam Integer Id){
+		HashMap<String, String> reHashMap = new HashMap<String,String>();
+		app_info appInfo = infoservice.getid(Id);
+		if(appInfo == null){
+			reHashMap.put("errorCode", "exception000001");
+		}else{
+			int i = appInfo.getStatus()==4?infoservice.modifyupdown(5, Id):infoservice.modifyupdown(4, Id);
+			if(i>0){
+				reHashMap.put("errorCode", "0");
+				reHashMap.put("resultMsg", "success");
+			}else{
+				reHashMap.put("resultMsg", "failed");
+			}
+		}
+		return JSONArray.toJSONString(reHashMap);
+	}
+	
+	@RequestMapping(value="/delfile")
+	@ResponseBody
+	public Object deletePhoto(@RequestParam BigInteger id){
+		HashMap<String, String> reHashMap = new HashMap<String,String>();
+		if(id == null){
+			reHashMap.put("result", "0.0");
+		}else{
+		   boolean i = infoservice.modifyPhoto(id);
+		   if(i){
+			   reHashMap.put("delResult", "success");
+			}else{
+			reHashMap.put("delResult", "failed");
+			}
+		}
+		return JSONArray.toJSONString(reHashMap);
 	}
 }

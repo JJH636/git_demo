@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import cn.pojo.app_info;
 import cn.pojo.data_dictionary;
 
 public interface dictionaryMapper {

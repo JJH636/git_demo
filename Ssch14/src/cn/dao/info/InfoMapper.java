@@ -26,4 +26,12 @@ public interface InfoMapper {
 	public app_info getAPK(@Param("APKName")String APKName)throws Exception;
 	
 	public app_info getid(@Param("id")Integer id)throws Exception;
+	
+	public app_info getid2(@Param("id")Integer id)throws Exception;
+	
+	public int delete(@Param("id")Integer id)throws Exception;
+	
+	public int modifyupdown(@Param("status")Integer status,@Param("id")Integer id)throws Exception;
+	
+	public int modifyPhoto(@Param("id")BigInteger id)throws Exception;
 }

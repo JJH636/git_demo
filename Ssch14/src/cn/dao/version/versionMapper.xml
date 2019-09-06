@@ -12,4 +12,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into app_version (appId,versionNo,versionSize,publishStatus,versionInfo,downloadLink,createdBy,creationDate,apkFileName) 
         values (#{appId},#{versionNo},#{versionSize},#{publishStatus},#{versionInfo},#{downloadLink},#{createdBy},#{creationDate},#{apkFileName})
 	</insert>
+	
+	<update id="mofidy" parameterType="app_version">
+		 update app_version
+			 <trim prefix="set" suffixOverrides="," suffix="where id = #{id}">
+		 		<if test="versionNo != null || versionNo != ''">versionNo=#{versionNo},</if>
+				<if test="versionSize != null || versionSize != ''">versionSize=#{versionSize},</if>
+				<if test="versionInfo != null || versionInfo != ''">versionInfo=#{versionInfo},</if>
+				<if test="modifyBy != null || modifyBy != ''">modifyBy=#{modifyBy},</if>
+				<if test="modifyDate !=null || modifyDate !=null">modifyDate=#{modifyDate}</if>
+			 </trim>
+	</update>
+	
+	<select id="getBYid" resultType="app_version">
+		SELECT * FROM app_version WHERE appId = #{appId} ORDER BY id DESC LIMIT 1
+	</select>
+	
+	<update id="mofidyzip" parameterType="app_version">
+		update app_version set apkFileName = null where id = #{id}
+	</update>
 </mapper>

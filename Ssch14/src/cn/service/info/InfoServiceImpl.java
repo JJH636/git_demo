@@ -115,4 +115,54 @@ public class InfoServiceImpl implements InfoService {
 		return false;
 	}
 
+	@Override
+	public app_info getid2(Integer id) {
+		app_info info =null;
+		try{
+			info = infomapper.getid2(id);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return info;
+	}
+
+	@Override
+	public boolean delete(Integer id) {
+		int num = 0;
+		try {
+			num = infomapper.delete(id);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public int modifyupdown(Integer status, Integer id) {
+		int num = 0;
+		try {
+			num = infomapper.modifyupdown(status,id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
+	@Override
+	public boolean modifyPhoto(BigInteger id) {
+		int num = 0;
+		try {
+			num = infomapper.modifyPhoto(id);
+			if(num > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

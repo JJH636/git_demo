@@ -82,6 +82,13 @@ public class app_version {
 	private int modifyBy;
 	private Date modifyDate;
 	private String appName;
+	private String apkLocPath;
+	public String getApkLocPath() {
+		return apkLocPath;
+	}
+	public void setApkLocPath(String apkLocPath) {
+		this.apkLocPath = apkLocPath;
+	}
 	public String getAppName() {
 		return appName;
 	}
