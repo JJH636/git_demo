@@ -29,6 +29,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="mofidyzip" parameterType="app_version">
-		update app_version set apkFileName = null where id = #{id}
+		update app_version set apkFileName = null,apkLocPath = null where id = #{id}
 	</update>
 </mapper>

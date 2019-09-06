@@ -150,7 +150,7 @@ public class versionController {
 		if(id == null){
 			reHashMap.put("result", "0.0");
 		}else{
-		   boolean i = infoservice.modifyPhoto(id);
+		   boolean i = version.mofidyzip(id);
 		   if(i){
 			   reHashMap.put("result", "success");
 			}else{

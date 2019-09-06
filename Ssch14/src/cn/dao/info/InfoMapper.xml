@@ -89,7 +89,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="categoryLevel1 != null || categoryLevel1 != ''">categoryLevel1=#{categoryLevel1},</if>
 				<if test="categoryLevel2 != null || categoryLevel2 != ''">categoryLevel2=#{categoryLevel2},</if>
 				<if test="categoryLevel3 != null || categoryLevel3 != ''">categoryLevel3=#{categoryLevel3},</if>
-				<if test="status != null || status != ''">status=#{status},</if>
 				<if test="appInfo != null || appInfo != ''">appInfo=#{appInfo}</if>
 			 </trim>
 	</update>
