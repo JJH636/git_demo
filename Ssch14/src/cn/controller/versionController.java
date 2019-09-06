@@ -152,9 +152,9 @@ public class versionController {
 		}else{
 		   boolean i = infoservice.modifyPhoto(id);
 		   if(i){
-			   reHashMap.put("delResult", "success");
+			   reHashMap.put("result", "success");
 			}else{
-			reHashMap.put("delResult", "failed");
+			reHashMap.put("result", "failed");
 			}
 		}
 		return JSONArray.toJSONString(reHashMap);

@@ -281,16 +281,16 @@ public class InfoController {
 	
 	@RequestMapping(value="/delfile")
 	@ResponseBody
-	public Object deletePhoto(@RequestParam BigInteger id){
+	public Object deletePhoto(@RequestParam BigInteger id,@RequestParam String flag){
 		HashMap<String, String> reHashMap = new HashMap<String,String>();
 		if(id == null){
 			reHashMap.put("result", "0.0");
 		}else{
 		   boolean i = infoservice.modifyPhoto(id);
 		   if(i){
-			   reHashMap.put("delResult", "success");
+			   reHashMap.put("result", "success");
 			}else{
-			reHashMap.put("delResult", "failed");
+			reHashMap.put("result", "failed");
 			}
 		}
 		return JSONArray.toJSONString(reHashMap);
